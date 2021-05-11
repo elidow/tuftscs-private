@@ -1,0 +1,184 @@
+Reading comprehension for type systems
+--------------------------------------
+*Download* and edit this file, `cqs-typesys.txt`, to answer the questions
+below.  Once you've edited the file, submit it by uploading it to the
+homework server and running command `submit105-cqs`.
+
+ 1. Read section 6.3, which describes how Typed Impcore is extended 
+    with arrays.  Examine code chunk 357, which shows
+    the cases that have to be added to the type checker.
+
+    For each case, name the type-system rule that applies.  Each
+    answer should be a rule name like Apply or GlobalAssign.
+
+      * The rule for case `| ty (AAT (a, i)) = ...` is: ARRAYAT
+
+
+      * The rule for case `| ty (APUT (a, i, e)) = ...` is: ARRAYPUT
+
+
+      * The rule for case `| ty (AMAKE (len, init)) = ...` is: MAKEARRAY
+
+
+      * The rule for case `| ty (ASIZE a) = ...` is: ARRAYSIZE
+
+
+    Now pick one of the rules and explain, in informal English, what
+    the rule is supposed to do.
+
+   ARRAYSIZE checks the type of a, and if it is an ARRAY(ty), then it returns INT because it is
+   Returning the size of the array.
+
+    _You are ready for homework exercise 18 (a pair problem)._
+
+ 2. Read section 6.6.3 on quantified types in Typed μScheme.
+    In addition to the prose, read the transcripts in the first couple
+    pages of that section: each value that has a quantified type is
+    instantiated later in the transcript, giving you more examples to
+    relate back to the prose.
+
+    (a) Assume variable `syms` holds a list of symbols (it has type
+        `(list sym)`).  What expression do you write to compute its
+        length? Pick exactly one of the options below.
+
+        1. `(length syms)`
+        2. `((o length sym) syms)`
+        3. `((@ length sym) syms)`
+        4. `((length sym) syms)`
+  
+        ANSWER: 3
+
+
+    (b) You are given a function `positive?` of type `(int -> bool)`.
+        Using the predefined function `o`, which has type
+        `(forall ('a 'b 'c) (('b -> 'c) ('a -> 'b) -> ('a -> 'c)))`,
+        what code do you write to compose `positive?` with `not`?
+        
+       ANSWER: ((@ o int bool bool) not positive?)
+        
+)
+
+    (c) In testing, we sometimes use a three-argument function `third`
+        that ignores its first two arguments and returns its third
+        argument.  Such a function has type
+
+            (forall ('a 'b 'c) ('a 'b 'c -> 'c))
+
+        There is only one sensible function that has this type.  Using
+        a `val` definition, define function `third` in Typed μScheme. 
+        You will need to use both `type-lambda` and `lambda`.
+
+        ANSWER: (val third (type-lambda ['a 'b 'c]
+              (lambda ([x : 'a] [y : 'b] [z :'c])
+              z)))
+
+    _You are ready for homework exercise TD._
+
+
+ 3. Read about type equivalence starting on page 378 and page 380.
+
+    You are given ML values `tau1` and `tau2`, which represent the
+    respective Typed μScheme types `(forall ('a) 'a)` and `(forall ('b) 'b)`.
+    Semantically, these types are equivalent. For each of the two ML
+    expressions below, say whether the expression produces `true`
+    or produces `false`. Write each answer immediately below the
+    expression.
+
+    (a) `tau1 = tau2` 
+        False
+
+
+    (b) `eqType (tau1, tau2)`
+        True
+
+
+    _You will soon be ready for exercise 19, but
+    you first need to complete the next two comprehension questions._
+
+
+ 4. Go back to section 6.6.5, which starts on page 370,
+    and read the typing rules for expressions in Typed μScheme.
+    For each of the expressions below, say if it is well typed, and if
+    so, **what type it has**.  If the expression is not well typed, say
+    what typing rule fails and why.
+
+        ; (a)
+        (if #t 1 #f)
+         It is not well typed. It is failing the IF typing rule because 
+         expression 2 and expression 3 have to be the same type. However,
+         expression 2 is a number, and expression 3 is a boolean.
+
+        ; (b)
+        (let ([x 1]
+              [y 2])
+           (+ x y))
+
+        It is well typed (type int)
+
+        ; (c)
+        (lambda ([x : int]) x)
+
+        It is well typed (type int -> int)
+
+        ; (d)
+        (lambda ([x : 'a]) x)
+
+        It is not well typed. Type a is unknown
+
+        ; (e)
+        (type-lambda ['a] (lambda ([x : 'a]) x))
+
+        It is well typed (type forall ('a) ('a->'a))
+  
+    _You are almost ready for exercise 19._
+
+
+ 5. Read Lesson 5 ("Program design with typing rules") of 
+    _Seven Lessons in Program Design_.  In particular, read the
+    explanation of how the If rule is rewritten to add
+    type-equality judgments τ ≡ τ3 and τ1 ≡ bool.  Now look at the
+    list of typing rules for expressions in Figure 6.12 on page 405
+    in *Programming Languages: Build, Prove, and Compare*.
+    Identify one other rule that needs to be rewritten in the same
+    fashion as If, for the same reason.
+    
+    The rule you found is named → SET
+
+
+    _You are now ready for exercise 19._
+
+
+ 6. Homework exercise R calls for you to add a primitive reference type to
+    Typed μScheme. Read it.  Then read "Primitive type constructors of
+    Typed uScheme" in section 6.6.10, which starts on page 390.
+
+    (a) When you add a primitive type constructor for references, what
+        chunk of the source code do you intend to add it to?
+        (Give the page number, and if applicable, the letter. For example,
+        page 390 has chunks 390a and
+        390b, and the letter is the simplest way to
+        distinguish the two.)
+
+    390a
+
+    On page 390, read "Selected primitive functions of typed uScheme."  
+    And in section Q.5 of the book's Supplement, which starts on page S399, 
+    read "Primitives of Typed μScheme." 
+
+    (b) Which set of primitive functions most resembles the functions
+        you will need to add for references?
+
+    It most resembles the set in 391c, related to lists.
+
+
+    (c) When you add primitive functions that operate on references, what
+        chunk of the source code do you intend to add them to?
+        (Just like we asked above, give the page number, and if
+        applicable, the letter.)
+    
+    391c
+    
+
+
+    _You are ready for Exercise R._
+
