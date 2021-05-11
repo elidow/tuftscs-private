@@ -1,1 +1,11 @@
+Created by Daniel Alderman and Eli Dow
 
+We collaborated with Ethan Schreiber and Emil Pokaweicz on the
+General design of unblackedges.c and discussed the benefits of BFS v. DFS.
+We also received help from various TAs, and even Richard! Additionally,
+we consulted stack overflow for help understanding various valgrind errors.
+
+Unblackedges.c, Bit2.h and .c, UArray2.h and .c, and Sudoku.c, have all been
+correctly implemented. For all cases they should perform as expected. 
+
+We spent approximately 25-30 hours on this assignment.
