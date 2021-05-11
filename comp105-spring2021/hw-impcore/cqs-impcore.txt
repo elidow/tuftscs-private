@@ -1,0 +1,98 @@
+Reading comprehension for Impcore
+=================================
+*Download* and edit this file, `cqs-impcore.txt`, to answer the
+questions below. (It will render strangely in Canvas, which is oddly
+stuck in the 20th century and cannot render Unicode characters.)
+
+Once you've edited the file, submit it by uploading it to the homework
+server and running command `submit105-cqs`.  (To get the command, you
+will need to run `use comp105`.)
+
+
+Please read pages 17--26 in *Programming Languages: Build, Prove, and Compare*.
+
+1.  What is the value of the following Impcore expression?
+
+        (if (> 3 5) 17 99)
+
+ANSWER: 99. This expression evaluates to 99. If-else statements in Impcore follow the syntax (if exp1 exp2 exp3), where exp1 is the conditional expression. If exp1 evaluates to true, then exp2 is executed. Otherwise, exp3 is executed. In this example, (> 3 5) = false because 3 > 5 is not true. Thus,  Thus, the value of the overall expression is 99.
+
+2.  Which of the following best describes the syntactic structure of
+    Impcore?
+
+    (a)   An expression can be made with any definition as one of its parts
+    (b)   A definition can be made with any expression as one of its parts
+    (c)   Both of the above
+    (d)   None of the above
+
+ANSWER: b. According to our textbook, an Impcore program is a sequence of definitions that each contain one or more expressions. It is not true the other way around. Thus, b best describes the syntactical structure of Impcore
+
+3.  Does the following Impcore test pass? Please answer "yes" or "no."
+
+        (check-expect (+ 1 2 3) 6)
+
+ANSWER: No, because there is only one operation and three arguments.
+
+    Assuming `x` is bound to a global variable, does the following
+    Impcore test pass? Again, please answer "yes" or "no."
+
+        (check-expect (set x 1) 1)
+
+ANSWER: Yes, if x is a global variable, then the test passes.
+
+In *Seven Lessons in Program Design*, on Canvas, read the
+Introduction and Lesson 1.
+
+
+4.  I show you a recursive function `f` that takes one argument, 
+    a natural number `n`.  The structure of `n`, and therefore the
+    internal structure of `f`, are based on the Peano proof system from
+    the handout.
+
+    (a) What are the different ways `n` can be formed?
+
+    ANSWER: According to Peano, a natural number is either 0 or the successor of some other natural number (n + 1).
+
+    (b) When `f` is given `n`, what code do you expect `f` to use to
+        determine how `n` was formed?
+
+    ANSWER: if (= n 0)
+		;;zero case
+		;;successor case for form (n + 1)
+
+    (c) For which values of `n` do you expect `f` to make a recursive call?
+
+    ANSWER: I expect f to make a recursive call for all values of n > 0.
+
+    (d) When a recursive call is made, what value is passed as argument?
+
+    ANSWER: When a recursive call is made, n - 1 is passed as an argument.
+
+
+Read the expectations about contracts in the course coding guidelines on Canvas.
+
+5.  Suppose I write a contract for a `power` function that says, "this
+    function multiplies $x$ by itself $n$ times."  According to our
+    expectations, is this a good contract or a bad contract?
+    Please answer "good" or "bad."
+
+ANSWER: This is overall bad. Although it gives a decent description of what the function does, it does not mention the parameter(s) of the function and which value is returned. Also, it should mention that x and n are natural numbers, or some sort of description/constraint.
+
+6.  In *Seven Lessons in Program Design*, just before the end of
+    Lesson 1, you will find a section on "Complete process examples."
+    This section suggests that the `factorial` function---but not the
+    `power` function---could be submitted without a contract.
+    
+    (a) Why would it be OK to submit the `factorial` function without
+        a contract?  For an idea, look at the "Exemplary" column in
+        the "Documentation" section of the general coding rubric.
+
+    ANSWER: There are exceptions when excluding a function contract. If it very clear from the function name/parameters what the function does, then a function contract is not necessary. It is obvious that a function named factorial returns the factorial of its only parameter because the word factorial has no other meaning/interpretation.
+
+    (b) Why doesn't the same argument apply to the `power` function?
+        For an idea, check the design lesson.
+
+    ANSWER: On the other hand, a function named power is not exempted from a missing contract. A function named power isn't completely clear that power returns x^n (if x is the first parameter and n is the second). Power has a lot of different meanings/interpretations, so you need a function contract to be clear about what it passes in, does, and returns.
+
+
+You're all done!  Submit using `submit-impcore-cqs`.
