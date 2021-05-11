@@ -1,0 +1,147 @@
+Reading comprehension for operational semantics
+-----------------------------------------------
+*Download* and edit this file, `cqs-opsem.txt`, to answer the
+questions below. (It will render strangely in Canvas, which is oddly
+stuck in the 20th century and cannot render Unicode characters.)
+If your editor is not good with Greek letters, you can spell out their
+names: ξ is $\xi$, ϕ is $\phi$, and ρ is $\rho$.
+
+Once you've edited the file, submit it by uploading it to the homework
+server and running command `submit105-cqs`.
+
+For questions 1--7, please read pages 28--37 (the book sections on
+environments and on operational semantics of expressions).
+These questions are multiple-choice.
+
+ 1. $\xi$ (ξ) is an environment that maps names to
+
+    (a) *only* user-defined functions.
+    (b) *only* the values of formal parameters.
+    (c) *both* primitive and user-defined functions.
+    (d) the values of *both* global variables and formal parameters.
+    (e) *only* primitive functions.
+    (f) *only* the values of global variables.
+
+ ANSWER: The answer is (f). Environment (ξ) only maps names to the values of global variables.
+
+ 2. $\phi$ (ϕ) is an environment that maps names to
+
+    (a) *only* user-defined functions.
+    (b) *only* the values of formal parameters.
+    (c) *both* primitive and user-defined functions.
+    (d) the values of *both* global variables and formal parameters.
+    (e) *only* primitive functions.
+    (f) *only* the values of global variables.
+
+ ANSWER: The answer is (c). Environment (ϕ) maps to both primitive and user-definition functions
+
+ 3. $\rho$ (ρ) is an environment that maps names to
+
+    (a) *only* user-defined functions.
+    (b) *only* the values of formal parameters.
+    (c) *both* primitive and user-defined functions.
+    (d) the values of *both* global variables and formal parameters.
+    (e) *only* primitive functions.
+    (f) *only* the values of global variables.
+
+ ANSWER: The answer is (b). Environment (ρ) only maps names to the values of formal parameters.
+
+ 4. In the operational semantics, what kind of a thing does the
+    metavariable $e$ stand for?
+
+    (a) an environment
+    (b) an Impcore variable
+    (c) a function
+    (d) an expression
+    (e) a value
+ 
+ ANSWER: The answer is (d), an expression.
+
+ 5. In the operational semantics, what kind of a thing does the
+    metavariable $v$ stand for?
+
+    (a) an environment
+    (b) an Impcore variable
+    (c) a function
+    (d) an expression
+    (e) a value
+
+ ANSWER: The answer is (e), a value.
+
+ 6. In the operational semantics, what kind of a thing does the
+    phrase "ρ{x ↦ 7}(x)" ($\rho\{x \mapsto 7\}(x)$) stand for?
+
+    (a) an environment
+    (b) an Impcore variable
+    (c) a function
+    (d) an expression
+    (e) a value
+
+ ANSWER: The answer is (e), a value.
+
+ 7. In the operational semantics, what kind of a thing does the
+    phrase "ρ{x ↦ 7}{x ↦ 8}" ($\rho\{x \mapsto 7\}\{x \mapsto 8\}$)
+    stand for?
+
+    (a) an environment
+    (b) an Impcore variable
+    (c) a function
+    (d) an expression
+    (e) a value
+
+ ANSWER: The answer is (a), an environment
+
+Questions 8 and 9 are also based on
+pages 28--37.
+Please answer a number.
+
+ 8. How many rules have the IF syntactic form in the conclusion?
+
+ ANSWER: There are 2 rules with the IF syntactic form in the conclusion:
+         The IfTrue form and the IfFalse form.
+
+ 9. How many rules have the APPLY syntactic form in the conclusion?
+
+    (Count *all* the rules that are written in the section, not only 
+    the rules in the summary on page 80.
+    And count *only* the rules that are *written* in the section,
+    not rules that are merely implied.)
+
+ ANSWER: There are 5 rules with the APPLY syntactic form in the conclusion:
+         ApplyUser, ApplyAdd, ApplyEqTrue, ApplyEqFalse, and ApplyPrintLn.
+
+Now let's understand a subtle point about rules. Study the FormalVar
+and FormalAssign rules starting on page 32.  In FormalVar, the initial
+and final states have the same $\rho$ (ρ).  But in the FormalAssign rule,
+there is an initial state with $\rho$ (ρ), an intermediate state with
+$\rho'$ (ρ'), and a final state with ρ'{x ↦ v} ($\rho'\{x \mapsto v\}$).
+Answer these questions:
+
+10. In rule FormalVar, the initial and final state have the same $\rho$ (ρ) 
+    because
+
+    (a) Evaluating $x$ might change the value of some formal parameter.
+    (b) Evaluating $x$ might not change the value of any formal parameter.
+    (c) Evaluating $x$ doesn't change the value of any formal parameter.
+
+ ANSWER: The answer is (c).
+      
+11. In rule FormalAssign, there is an intermediate state with $\rho'$ (ρ')
+    (rho-prime) because
+
+    (a) Evaluating $e$ might change the value of some formal parameter.
+    (b) Evaluating $e$ might not change the value of any formal parameter.
+    (c) Evaluating $e$ doesn't change the value of any formal parameter.
+
+ ANSWER: The answer is (a).
+
+12. Consider the sample derivation on page 58.
+    The same $\rho$ (ρ) is used throughout the derivation because
+
+    (a) Every subexpression is known, and because there is no unknown
+        subexpression, there is no need for a $\rho'$ (ρ') (rho-prime).
+    (b) No part of the evaluation changes the value of a formal parameter.
+    (c) The example derivation takes a shortcut and doesn't actually
+        conform to the rules.
+
+ ANSWER: The answer is (b).
