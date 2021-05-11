@@ -1,1 +1,16 @@
+README 
+COMP 105: hw-scheme
 
+Eli Dow 
+
+All theory problems and coding problems have been completed. I completed the 
+first extra-credit problem (TDP), but not the second.
+
+Emil Polakiewicz and I verbally shared general ideas for Excercise A, flatten,
+and arg-max. Elise cho and I discussed the possible inputs/cases for arg-max.
+
+Shout out to TA Emily Gheewalla for helping me with a bug in arg-max and giving
+other advice on my algebraic laws.
+
+In general, directions were mostly clear, but I think that it should be
+specified that 0 is included as a natural number in take/drop.
