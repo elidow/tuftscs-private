@@ -1,1 +1,23 @@
+Authors: Eli Dow - edow01 and Daniel Alderman - dalder01 
 
+Acknowledgements: Together (Eli and Daniel) we wrote all of the code. We talked
+over data structure design with Emil Polakiewicz and Ethan Schrieber. We talked
+about the concept of atoms with Max Kaye and his partner Phillip. We got
+help from multiple comp40 TAs in halligan (you guys are the best, thank you!).
+We also consulted stack overflow for help understanding and pinpointing the
+various valgrind errors that we got. 
+
+Brightness.c has been correctly implemented. Readaline.c has been correctly
+implemented for the version that handles all lines regardless of length.
+Simlines.c has been correctly implemented. 
+
+All of simlines is included in simlines.c. In simlines, if one of the files
+can not be opened we continue on and try to access the rest of the files
+provided. This prevents one bad file at the beginning ending the entire
+program. If none of the provided files can be opened, nothing happens and it
+ends happily. We broke up individual tasks into multiple functions, for example
+pass_info handles readaline and collects its data and then table_maker puts the
+data into our Table_T. For simplicity we also included our short struct 
+definition of line_T in simlines.c
+
+Time estimate: 25 hours, 2 mild panic attacks, and 1 chipped tooth. 
