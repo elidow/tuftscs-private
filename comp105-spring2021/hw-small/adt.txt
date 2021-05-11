@@ -1,0 +1,74 @@
+*** adt.txt ***
+Eli Dow, Erce Ozmetin
+
+
+Exercise 37: Natural Class (SubClass Representation)
+
+Natural is an abstract class for natural numbers that has two 
+subclasses: NatZero NatNonZero
+
+Each subclass has the following invariants and abstraction function.
+
+We chose this representation because we wanted to create a recursive datatype 
+while having a base case. We chose to represent zero and nonzero natural numbers
+in two different classes so that we can implement the bases cases for the methods
+in NatZero class and have the recursive cases in NatNonZero class. We chose 
+the base to be 2^15 after testing the performance.
+
+NatZero:
+
+    No instance variables
+    
+    Abstraction Function: 
+        nat(0) = NatZero
+
+    invariants: none
+
+
+NatNonZero:
+    Instance variables: n : an intance of Natural class, 
+                            could be NatZero or NatNonZero
+                        d : a nonnegative integer
+
+Abstraction nat(n*b + d) = nat(n) + d
+                  
+Invariant (NatNonZero) = b > 10, 
+                         (n != NatZero or d != 0) , 0 < d < b, 
+                         
+    Invariant:
+        (method invariant () ((((n isZero) not) or: {(d > 0)}) 
+                                                and: {(d < (Natural base))}))
+
+
+-------------------------------------------------------------------------------
+
+Exercise 38: LargeInteger class (Subclass Representation)
+
+
+Natural is an abstract class for natural numbers that has two 
+subclasses:  LargePositiveInteger, LargeNegativeInteger
+
+Both subclasses inherit the magnitude variable that stores the natural 
+representation of the number. 
+
+LargePositiveInteger: stores a Natural class instance that represents 
+nonnegative integers including 0. There are no invariants for this class.
+
+Abstraction:
+A (LargePositiveInteger i) == + Natural i
+
+Invariant:
+I (LargePositiveInteger i) == (i >= 0) 
+
+LargeNegativeInteger: stores a Natural class instance that represents 
+negative integers. The only invariant is that magnitute is a NatNonZero class.
+
+Abstraction:
+A (LargeNegativeInteger(i)) == - Natural i
+
+Invariant:
+I (LargeNegativeInteger(i)) == (i > 0)
+
+
+
+                        
