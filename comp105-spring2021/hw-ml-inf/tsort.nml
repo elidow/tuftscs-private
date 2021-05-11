@@ -1,0 +1,160 @@
+; TOPOLOGICAL SORT --- FUNCTIONAL VERSION
+
+; I've tried for a clear, simple solution with no concern for efficiency.
+
+; Here are the graph operations
+
+(check-principal-type has-predecessor-in?
+                      (forall ('a 'b) ('a (list (pair 'b 'a)) -> bool)))
+(check-principal-type node-without-predecessors
+                      (forall ('a) ((list (pair 'a 'a)) -> (list 'a))))
+(check-principal-type appears-in?
+                      (forall ('a) ('a (list (pair 'a 'a)) -> bool)))
+(check-type           successors
+                      (forall ('a) ('a (list (pair 'a 'a)) -> (list 'a))))
+(check-principal-type remove-node
+                      (forall ('a) ('a (list (pair 'a 'a)) -> (list (pair 'a 'a)))))
+(check-principal-type member?
+                      (forall ('a) ('a (list 'a) -> bool)))
+(check-principal-type find-a-cycle
+                      ((list (pair sym sym)) -> (list sym)))
+(check-principal-type tsort
+                      ((list (pair sym sym)) -> (list sym)))
+(check-principal-type graph-of-edge-list (forall ('a) ((list (list 'a)) -> (list (pair 'a 'a)))))
+
+
+
+; To find a node without predecessors, I walk down the graph testing
+; the head of each edge.  I have to test the head of the edge against
+; the *entire* graph, not just the part I'm walking down.
+
+(define has-predecessor-in? (node graph)
+  (if (null? graph) #f
+      (if (= node (snd (car graph))) #t
+          (has-predecessor-in? node (cdr graph)))))
+
+; if a node without predecessors exists, return a singleton list containing one,
+; otherwise return the empty list
+(define node-without-predecessors (graph)
+  (letrec ((nwop-in-edges
+	    (lambda (edges)
+	      (if (null? edges) '()
+		  (if (has-predecessor-in? (fst (car edges)) graph)
+		      (nwop-in-edges (cdr edges))
+		      (list1 (fst (car edges))))))))
+  (nwop-in-edges graph)))
+
+(define appears-in? (node graph)
+  (if (null? graph) #f
+      (if (or (= node (fst (car graph))) (= node (snd (car graph)))) #t
+          (appears-in? node (cdr graph)))))
+
+(define successors (node graph)
+  (letrec ((nodesucc
+	    (lambda (graph)
+	      (if (null? graph) '()
+		  (if (= node (fst (car graph)))
+		      (cons (snd (car graph)) (nodesucc (cdr graph)))
+		      (nodesucc (cdr graph)))))))
+    (nodesucc graph)))
+
+
+
+; To remove a node and its edges, I remove any edge in which the node
+; appears.
+
+(define remove-node (node graph)
+  (letrec ((rem
+	    (lambda (graph)
+	      (if (null? graph) '()
+		  (if (or (= node (fst (car graph))) (= node (snd (car graph)))) 
+		      (rem (cdr graph))
+		      (cons (car graph) (rem (cdr graph))))))))
+    (rem graph)))
+
+
+; To find a cycle, we check each edge to see if it's part of a cycle
+
+(define member? (x ps) (if (null? ps) #f (if (= x (car ps)) #t (member? x (cdr ps)))))
+
+(define find-a-cycle (graph) 
+  (letrec (
+	   ; To find a cycle containing a particular node, 
+	   ; use depth-first search until we get to a vertex
+	   ; we've seen before.  If the depth-first walk reaches a leaf, it
+	   ; returns the empty list.  When it sees a node already visited, it
+	   ; returns that node.
+	   ;
+	   ; `visited' is a list of nodes that have been visited
+	   ;
+      (visit  ; visit node and return cycle if found
+       (lambda (node visited) ; returns non-null if found a cycle
+	 (if (member? node visited) (cons node '()) ; found a cycle
+	     (let ((partial-cycle
+		    (visit-list (successors node graph) (cons node visited))))
+	       (if (null? partial-cycle)
+		   '()                                       ; no cycle, so return null
+		   (cons node (cons '-> partial-cycle))))))) ; add node to the cycle
+      (visit-list ; visit list of nodes and return a cycle if found
+       (lambda (nodes visited)
+	 (if (null? nodes) '()
+	     (let ((partial-cycle (visit (car nodes) visited)))
+	       (if (not (null? partial-cycle))
+		   partial-cycle
+		   (visit-list (cdr nodes) visited)))))))
+    ; If there's a cycle, either it includes the first edge, and we
+    ; find it by visiting either node of that edge, or else it doesn't
+    ; include that edge, and we can look in the rest of the graph
+    (if (null? graph)
+	'()
+	(let ((maybe-cycle (visit (fst (car graph)) '())))
+	  (if (not (null? maybe-cycle)) maybe-cycle (find-a-cycle (cdr graph)))))))
+
+
+; To topologically sort a graph, find a node with no predecessors,
+; remove it and all its associated edges, and topologically sort
+; what's left over.  If all the nodes have predecessors, there's a
+; cycle.  We have to be extra careful because this operation breaks
+; the invariant of the representation we're using (that every node has
+; at least one edge).  When we remove a node and its edges, the
+; successor nodes might not have any other edges.  If so, it's safe to
+; add them to the answer, so that's just what we do with these ``lost
+; successors.''
+;  
+; I build up the answer one node at a time and backwards, so I don't
+; have a partial answer floating around if I find a cycle.
+
+
+(define tsort (graph) 
+  (letrec (
+     (aux 
+       (lambda  (graph lost-successors answer)
+	 (if (null? lost-successors) 
+	   ; no leftover successors --- sort as described above
+	   (if (null? graph) 
+	      (revapp answer '())
+	      (let ((node (node-without-predecessors graph)))
+		; if we found a node without predecessors, remove it
+		; and add it to the answer.
+		; if there is no such node, we've found a cycle
+		(if (not (null? node))
+                    (let ((node (car node)))
+  		      (aux (remove-node node graph) (successors node graph) 
+   			                                      (cons node answer)))
+		    (cons 'The-graph-has-a-cycle: (find-a-cycle graph)))))
+	   ; otherwise, if the successors don't appear, add them in
+	   (aux graph (cdr lost-successors)
+			       (if (appears-in? (car lost-successors) graph) 
+				   answer
+				   (cons (car lost-successors) answer)))))))
+    (aux graph '() '())))
+
+
+
+(define graph-of-edge-list (list)
+  (if (null? list)
+     '()
+     (cons (pair (caar list) (car (cdar list))) (graph-of-edge-list (cdr list)))))
+
+(check-expect (tsort (graph-of-edge-list '((a b) (b c) (b e) (d e))))
+             '(a b c d e))

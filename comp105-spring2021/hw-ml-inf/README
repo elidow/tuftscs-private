@@ -1,1 +1,39 @@
+README 
+COMP 105: hw-ml-inf
+Partners: Eli Dow, Ming De Sim
 
+Parts of the assignment completed: Everything, 1, 23(a), (b)
+
+We went to Office Hours a couple times.
+
+
+1
+fun f x = f x
+
+23(b)
+    ("ref", unaryOp
+                (fn (NUM v) => 
+                let val it = REF (ref (NUM v))
+                in it
+                end
+                | _ => raise BugInTypeInference
+                                "not an integer"),
+                funtype ([alpha], reftype alpha)) 
+                                                        ::
+    ("!",   unaryOp
+                (fn REF (ref (NUM v)) => 
+                let val it = (NUM v)
+                in it
+                end
+                | _       => raise BugInTypeInference
+                                "not a ref value"),
+                funtype ([reftype alpha], alpha))  
+                                                        ::
+    (":=",  binaryOp
+                (fn (REF (ref (NUM v)), (NUM v')) => 
+                let val it = REF (ref (NUM v'))
+                in (it; unitVal)
+                end
+                | _       => raise BugInTypeInference
+                                "not a ref value"),
+                funtype ([reftype alpha, alpha], unittype))

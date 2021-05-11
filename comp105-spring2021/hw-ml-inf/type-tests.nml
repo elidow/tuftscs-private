@@ -1,0 +1,45 @@
+;; type-tests.nml
+;; unit tests
+
+(check-principal-type (lambda (a b c)                       ;; lambda
+                      (if (null? a)                         ;; if
+                          (begin                            ;; if true/begin
+                              '(1)
+                              '(#t)
+                              '(d)
+                              (cons 3 (cons 2 (cons 1 '()))))
+                          (let                              ;; if false/let
+                              [(x (cons 1 b)) 
+                               (y (cons b c))
+                               (z (cons c a))] x)
+                        )) 
+                        ((list (list (list int)))
+                        (list int) (list (list int)) -> 
+                        (list int)))
+
+
+
+(check-type-error (val-rec 
+                      function_one
+                      (lambda (x)                          ;; lambda
+                          (begin (+ x 1)                   ;; begin
+                                 (+ x 2) 
+                                 (cons x '())
+                                 (if (null? x)             ;; if
+                                     (letrec               ;; if true/letrec
+                                         [(one (lambda (a) (cons a x)))
+                                          (two (lambda (b) (+ b b)))]
+                                          (one 3)) 
+                                     (cons 1 x))))))       ;; if false
+
+
+
+(check-type-error (begin                                    ;; begin
+                    '(a)
+                    '(1)
+                    (if #f                                  ;; if
+                        '(1)                                ;; if true
+                        (letrec                             ;; if false/letrec
+                            [(one (lambda (x) (+ x 1)))
+                            (two (lambda (y) (cons y x)))]
+                            (two 2)))))

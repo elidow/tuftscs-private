@@ -1,0 +1,13 @@
+;; pairs.nml
+
+(pair 1 2)
+(pair #t 1)
+
+(fst '(1 #t))
+(fst '(1 1))
+(fst (pair 1 #t))
+
+(fst (pair 1 2))
+(snd (pair 1 2))
+
+(cdr '(1 2 3))
